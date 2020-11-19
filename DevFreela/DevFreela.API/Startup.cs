@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DevFreela.Application.Queries.GetUser;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +28,10 @@ namespace DevFreela.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            //Obtém todas as classes do assembly do projeto da classe GetUserQuery que implementam as interfaces IRequest e IRequestHandler
+            services.AddMediatR(typeof(GetUserQuery)); 
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

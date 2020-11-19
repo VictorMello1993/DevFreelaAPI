@@ -4,4 +4,21 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\CreateUser\" />
+    <Folder Include="Commands\CreateProvidedService\" />
+    <Folder Include="Commands\CreateSkill\" />
+    <Folder Include="Commands\StartProvidedService\" />
+    <Folder Include="Queries\GetProvidedServices\" />
+    <Folder Include="Queries\SearchFreelancer\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DevFreela.Domain\DevFreela.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
