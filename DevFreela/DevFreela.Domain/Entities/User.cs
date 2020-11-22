@@ -1,13 +1,13 @@
-﻿using System;
+﻿using DevFreela.Domain.Enums;
+using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DevFreela.Domain.Entities
 {
     public class User : BaseEntity
     {
         //Um usuário pode ser freelancer ou cliente
-        public User(string name, string email, DateTime birthDate)
+        public User(string name, string email, DateTime birthDate, EnumUserType userType)
         {
             Name = name;
             Email = email;
@@ -17,6 +17,7 @@ namespace DevFreela.Domain.Entities
             ProvidedServices = new List<ProvidedService>();
             OwningProvidedServices = new List<ProvidedService>();
             Active = true;
+            UserType = userType;
         }
 
         public string Name { get; private set; }
@@ -27,5 +28,6 @@ namespace DevFreela.Domain.Entities
         public List<ProvidedService> ProvidedServices { get; private set; } //Serviços prestados feitos pelos FREELANCERS
         public List<ProvidedService> OwningProvidedServices { get; private set; } //Serviços prestados solicitados pelo CLIENTES
         public bool Active { get; set; }
+        public EnumUserType UserType { get; private set; }
     }
 }

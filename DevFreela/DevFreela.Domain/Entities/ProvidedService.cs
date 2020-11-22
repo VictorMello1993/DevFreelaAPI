@@ -1,7 +1,5 @@
 ﻿using DevFreela.Domain.Enums;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DevFreela.Domain.Entities
 {
@@ -27,6 +25,6 @@ namespace DevFreela.Domain.Entities
         public DateTime? StartedAt { get; private set; }
         public DateTime? FinishedAt { get; private set; }
         public StatusProvidedServiceEnum Status { get; private set; }
-        public Decimal TotalCost { get; set; }
+        public Decimal TotalCost { get; private set; }
     }
 }

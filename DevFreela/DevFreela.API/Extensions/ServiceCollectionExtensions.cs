@@ -10,6 +10,7 @@ namespace DevFreela.API.Extensions
         {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
+            services.AddScoped<IProvidedServiceRepository, ProvidedServiceRepository>();
 
             return services;
         }

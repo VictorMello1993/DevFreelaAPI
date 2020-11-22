@@ -15,6 +15,19 @@ namespace DevFreela.API.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllSkills()
+        {
+            var result = await _mediator.Send(new GetAllSkillsQuery());
+
+            if(result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSkill(int id)
         {

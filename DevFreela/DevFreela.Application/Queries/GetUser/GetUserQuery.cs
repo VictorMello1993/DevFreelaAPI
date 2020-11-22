@@ -9,6 +9,8 @@ namespace DevFreela.Application.Queries.GetUser
             IdUser = idUser;
         }
 
+        public GetUserQuery() { }
+
         public int IdUser { get; private set; }
     }
 }

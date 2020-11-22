@@ -1,6 +1,7 @@
 ﻿using DevFreela.Domain.Entities;
 using DevFreela.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DevFreela.Infrastructure.Persistence.Repositories
@@ -17,6 +18,11 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
         {
             await _dbContext.Skills.AddAsync(skill);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<Skill>> GetAllSkillsAsync()
+        {
+            return await _dbContext.Skills.ToListAsync();
         }
 
         public async Task<Skill> GetSkillAsync(int idSkill)

@@ -5,10 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\CreateProvidedService\" />
     <Folder Include="Commands\StartProvidedService\" />
-    <Folder Include="Queries\GetProvidedServices\" />
-    <Folder Include="Queries\SearchFreelancer\" />
   </ItemGroup>
 
   <ItemGroup>

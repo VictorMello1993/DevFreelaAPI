@@ -23,14 +23,14 @@ namespace DevFreela.Application.Commands.CreateUser
 
         public async Task<CreateUserViewModel> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = new User(request.Name, request.Email, request.BirthDate);
+            var user = new User(request.Name, request.Email, request.BirthDate, request.UserType);
 
             //await _dbcontext.Users.AddAsync(user);
             //await _dbcontext.SaveChangesAsync();
 
             await _userRepository.Add(user);
             //Chamada para acesso a dados e persistir no banco
-            return new CreateUserViewModel(user.Id, user.Name, user.Email, user.BirthDate);
+            return new CreateUserViewModel(user.Id, user.Name, user.Email, user.BirthDate, user.UserType);
         }
     }
 }

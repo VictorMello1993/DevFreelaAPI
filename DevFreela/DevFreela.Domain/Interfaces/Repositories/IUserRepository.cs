@@ -1,7 +1,6 @@
 ﻿using DevFreela.Domain.Entities;
-using System;
+using DevFreela.Domain.Enums;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DevFreela.Domain.Interfaces.Repositories
@@ -10,5 +9,8 @@ namespace DevFreela.Domain.Interfaces.Repositories
     {
         Task Add(User user);
         Task<User> GetUserAsync(int idUser);
+        Task<User> GetUserFreelancerAsync(int IdUser);
+        Task<User> GetUserClientAsync(int IdUser);
+        Task<List<User>> GetAllUsersAsync();
     }
 }
