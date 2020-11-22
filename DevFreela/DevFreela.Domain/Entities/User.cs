@@ -13,17 +13,19 @@ namespace DevFreela.Domain.Entities
             Email = email;
             BirthDate = birthDate;
             CreatedAt = DateTime.Now;
-            Skills = new List<UserSkill>();
+            UserSkills = new List<UserSkill>();
             ProvidedServices = new List<ProvidedService>();
             OwningProvidedServices = new List<ProvidedService>();
+            Active = true;
         }
 
         public string Name { get; private set; }
         public string Email { get; private set; }
         public DateTime BirthDate { get; private set; }
         public DateTime CreatedAt { get; private set; }
-        public List<UserSkill> Skills { get; private set; }
+        public List<UserSkill> UserSkills { get; private set; }
         public List<ProvidedService> ProvidedServices { get; private set; } //Serviços prestados feitos pelos FREELANCERS
         public List<ProvidedService> OwningProvidedServices { get; private set; } //Serviços prestados solicitados pelo CLIENTES
+        public bool Active { get; set; }
     }
 }
