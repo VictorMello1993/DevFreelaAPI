@@ -1,31 +1,27 @@
 ﻿using DevFreela.Domain.Entities;
 using DevFreela.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DevFreela.Infrastructure.Persistence.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class SkillRepository : ISkillRepository
     {
         private readonly DevFreelaDbContext _dbContext;
-
-        public UserRepository(DevFreelaDbContext dbContext)
+        public SkillRepository(DevFreelaDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task Add(User user)
+        public async Task Add(Skill skill)
         {
-            await _dbContext.Users.AddAsync(user);
+            await _dbContext.Skills.AddAsync(skill);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<User> GetUserAsync(int idUser)
+        public async Task<Skill> GetSkillAsync(int idSkill)
         {
-            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == idUser);
+            return await _dbContext.Skills.FirstOrDefaultAsync(s => s.Id == idSkill);
         }
     }
 }

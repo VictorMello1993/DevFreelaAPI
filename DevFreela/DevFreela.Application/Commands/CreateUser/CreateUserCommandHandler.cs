@@ -1,8 +1,6 @@
 ﻿using DevFreela.Domain.Entities;
-using DevFreela.Infrastructure.Persistence;
-using DevFreela.Infrastructure.Persistence.Repositories;
+using DevFreela.Domain.Interfaces.Repositories;
 using MediatR;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
