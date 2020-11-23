@@ -49,6 +49,6 @@ namespace DevFreela.API.Controllers
             var result = await _mediator.Send(command);
 
             return CreatedAtAction(nameof(GetSkill), new { id = result.Id }, result);
-        }
+        }        
     }
 }

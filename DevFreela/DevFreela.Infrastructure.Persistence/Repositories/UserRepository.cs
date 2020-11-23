@@ -22,11 +22,23 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
         {
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
-        }
+        }        
 
         public async Task<User> GetUserAsync(int idUser)
         {
             return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == idUser);
+        }
+
+        public async Task Inactivate(User user)
+        {
+            user.Inactivate();
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task Activate(User user)
+        {
+            user.Activate();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<User> GetUserFreelancerAsync(int IdUser)

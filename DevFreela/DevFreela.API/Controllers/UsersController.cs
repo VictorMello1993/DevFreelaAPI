@@ -1,4 +1,5 @@
 ﻿using DevFreela.Application.Commands.CreateUser;
+using DevFreela.Application.Commands.InactivateUser;
 using DevFreela.Application.Queries.GetUser;
 using DevFreela.Application.Queries.SearchClient;
 using DevFreela.Application.Queries.SearchFreelancer;
@@ -80,6 +81,22 @@ namespace DevFreela.API.Controllers
             var result = await _mediator.Send(command);
 
             return CreatedAtAction(nameof(GetUser), new { id = result.Id }, result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult>Delete(int id)
+        {
+            var inputModel = new InactivateUserInputModel { Id = id };
+            var command = new InactivateUserCommand(inputModel.Id);
+
+            var result = await _mediator.Send(command);
+
+            if(result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok();
         }
     }
 }
