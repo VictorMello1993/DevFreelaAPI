@@ -39,5 +39,15 @@ namespace DevFreela.Domain.Entities
         {
             this.Active = true;
         }
+
+        public void SetEmail(string newEmail)
+        {
+            this.Email = newEmail;
+        }
+
+        public void SetName(string newName)
+        {
+            this.Name = newName;
+        }
     }
 }

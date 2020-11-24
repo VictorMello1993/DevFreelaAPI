@@ -1,5 +1,7 @@
-﻿using DevFreela.Application.Commands.CreateUser;
+﻿using DevFreela.Application.Commands.ActivateUser;
+using DevFreela.Application.Commands.CreateUser;
 using DevFreela.Application.Commands.InactivateUser;
+using DevFreela.Application.Commands.UpdateUser;
 using DevFreela.Application.Queries.GetUser;
 using DevFreela.Application.Queries.SearchClient;
 using DevFreela.Application.Queries.SearchFreelancer;
@@ -46,7 +48,7 @@ namespace DevFreela.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/Users/Freelancer/{id}")]
+        [HttpGet("Freelancer/{id}")]
         public async Task<IActionResult> GetUserFreelancer(int id)
         {
             var query = new SearchFreelancerQuery(id);
@@ -60,7 +62,7 @@ namespace DevFreela.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/Users/Clients/{id}")]
+        [HttpGet("Clients/{id}")]
         public async Task<IActionResult> GetUserClient(int id)
         {
             var query = new SearchClientQuery(id);
@@ -89,6 +91,34 @@ namespace DevFreela.API.Controllers
             var inputModel = new InactivateUserInputModel { Id = id };
             var command = new InactivateUserCommand(inputModel.Id);
 
+            var result = await _mediator.Send(command);
+
+            if(result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
+        [HttpPut("Activate/{id}")]
+        public async Task<IActionResult> Activate(int id)
+        {
+            var command = new ActivateUserCommand(id);
+            var result = await _mediator.Send(command);
+
+            if(result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+        
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] UpdateUserInputModel updateUserInputModel)
+        {
+            var command = new UpdateUserCommand(id, updateUserInputModel.Name, updateUserInputModel.Email);
             var result = await _mediator.Send(command);
 
             if(result == null)

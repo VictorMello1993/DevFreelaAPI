@@ -2,9 +2,7 @@
 using DevFreela.Domain.Enums;
 using DevFreela.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DevFreela.Infrastructure.Persistence.Repositories
@@ -38,6 +36,7 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
         public async Task Activate(User user)
         {
             user.Activate();
+            _dbContext.Entry(user).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
         }
 
@@ -54,6 +53,15 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
         public async Task<List<User>> GetAllUsersAsync()
         {
             return await _dbContext.Users.ToListAsync();
+        }
+
+        public async Task Update(User user, string name, string email)
+        {
+            user.SetName(name);
+            user.SetEmail(email);
+
+            _dbContext.Entry(user).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace DevFreela.Application.Commands.InactivateUser
 
             await _userRepository.Inactivate(user);
 
-            return new InactivateUserViewModel(user.Name);
+            return new InactivateUserViewModel(user.Name, user.Email);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using DevFreela.Domain.Entities;
-using DevFreela.Domain.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,5 +13,6 @@ namespace DevFreela.Domain.Interfaces.Repositories
         Task<User> GetUserFreelancerAsync(int IdUser);
         Task<User> GetUserClientAsync(int IdUser);
         Task<List<User>> GetAllUsersAsync();
+        Task Update(User user, string name, string email);
     }
 }
