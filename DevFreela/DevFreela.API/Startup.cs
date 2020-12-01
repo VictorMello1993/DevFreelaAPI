@@ -1,7 +1,10 @@
 using DevFreela.API.Extensions;
+using DevFreela.API.Filters;
 using DevFreela.Application.Queries.GetUser;
+using DevFreela.Application.Validators;
 using DevFreela.Infrastructure.Persistence;
 using DevFreela.Infrastructure.Persistence.Repositories;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,7 +28,8 @@ namespace DevFreela.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(o => o.Filters.Add(typeof(ValidationFilter))) //Configurando filtros de validação
+                    .AddFluentValidation(o => o.RegisterValidatorsFromAssemblyContaining<CreateUserInputModelValidator>()); //Adicionando classes de validação para configurar Fluent Validation
 
             //Conexão com banco de dados com EF Core
             var connectionString = Configuration.GetConnectionString("DevFreelaMySQL");

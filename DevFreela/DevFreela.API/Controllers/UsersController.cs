@@ -1,4 +1,5 @@
-﻿using DevFreela.Application.Commands.ActivateUser;
+﻿using DevFreela.API.Extensions;
+using DevFreela.Application.Commands.ActivateUser;
 using DevFreela.Application.Commands.CreateUser;
 using DevFreela.Application.Commands.InactivateUser;
 using DevFreela.Application.Commands.UpdateUser;
@@ -78,7 +79,7 @@ namespace DevFreela.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserInputModel inputModel)
-        {
+        {            
             var command = new CreateUserCommand(inputModel.Name, inputModel.Email, inputModel.BirthDate, inputModel.UserType);
             var result = await _mediator.Send(command);
 
