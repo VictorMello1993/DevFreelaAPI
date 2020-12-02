@@ -1,4 +1,5 @@
-﻿using DevFreela.Domain.Entities;
+﻿using DevFreela.Application.Commands.LoginUser;
+using DevFreela.Domain.Entities;
 using DevFreela.Domain.Interfaces.Repositories;
 using MediatR;
 using System.Threading;
@@ -23,14 +24,14 @@ namespace DevFreela.Application.Commands.CreateUser
 
         public async Task<CreateUserViewModel> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = new User(request.Name, request.Email, request.BirthDate, request.UserType);
+            var user = new User(request.Name, request.Email, request.BirthDate, LoginService.ComputeSha256Hash(request.Password), request.Role);
 
             //await _dbcontext.Users.AddAsync(user);
             //await _dbcontext.SaveChangesAsync();
 
             await _userRepository.Add(user);
             //Chamada para acesso a dados e persistir no banco
-            return new CreateUserViewModel(user.Id, user.Name, user.Email, user.BirthDate, user.UserType);
+            return new CreateUserViewModel(user.Id, user.Name, user.Email, user.BirthDate);
         }
     }
 }

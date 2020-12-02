@@ -80,7 +80,7 @@ namespace DevFreela.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserInputModel inputModel)
         {            
-            var command = new CreateUserCommand(inputModel.Name, inputModel.Email, inputModel.BirthDate, inputModel.UserType);
+            var command = new CreateUserCommand(inputModel.Name, inputModel.Email, inputModel.BirthDate, inputModel.Password, inputModel.Role);
             var result = await _mediator.Send(command);
 
             return CreatedAtAction(nameof(GetUser), new { id = result.Id }, result);

@@ -40,15 +40,15 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<User> GetUserFreelancerAsync(int IdUser)
-        {
-            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == IdUser && u.UserType == EnumUserType.Freelancer);
-        }
+        //public async Task<User> GetUserFreelancerAsync(int IdUser)
+        //{
+        //    return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == IdUser && u.UserType == EnumUserType.Freelancer);
+        //}
 
-        public async Task<User> GetUserClientAsync(int IdUser)
-        {
-            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == IdUser && u.UserType == EnumUserType.Client);
-        }
+        //public async Task<User> GetUserClientAsync(int IdUser)
+        //{
+        //    return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == IdUser && u.UserType == EnumUserType.Client);
+        //}
 
         public async Task<List<User>> GetAllUsersAsync()
         {
