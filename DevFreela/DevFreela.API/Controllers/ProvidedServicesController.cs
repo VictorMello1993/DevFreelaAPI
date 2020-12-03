@@ -1,6 +1,7 @@
 ﻿using DevFreela.Application.Commands.CreateProvidedService;
 using DevFreela.Application.Queries.GetProvidedServices;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -21,21 +22,48 @@ namespace DevFreela.API.Controllers
         {
             var result = await _mediator.Send(new GetAllProvidedServicesQuery());
 
-            if(result == null)
+            if (result == null)
             {
                 return NotFound();
             }
 
             return Ok(result);
         }
-        
+
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetProvidedService(int id)
+        //{
+        //    var query = new GetProvidedServiceQuery(id);
+        //    var result = await _mediator.Send(query);
+
+        //    if(result == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return Ok(result);
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult>CreateProvidedService([FromBody] CreateProvidedServiceInputModel inputModel)
+        //{
+        //    var command = new CreateProvidedServiceCommand(inputModel.Title, inputModel.Description, inputModel.IdClient, 
+        //                                                   inputModel.IdFreelancer, inputModel.TotalCost);
+
+        //    var result = await _mediator.Send(command);
+
+        //    return CreatedAtAction(nameof(GetProvidedService), new { id = result.Id }, result);
+        //}
+
+
         [HttpGet("{id}")]
+        [Authorize(Roles = "client, freelancer")]
         public async Task<IActionResult> GetProvidedService(int id)
         {
             var query = new GetProvidedServiceQuery(id);
             var result = await _mediator.Send(query);
 
-            if(result == null)
+            if (result == null)
             {
                 return NotFound();
             }
@@ -44,14 +72,19 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult>CreateProvidedService([FromBody] CreateProvidedServiceInputModel inputModel)
+        [Authorize(Roles = "client")]
+        public async Task<IActionResult> CreateProvidedService([FromBody] CreateProvidedServiceCommand command)
         {
-            var command = new CreateProvidedServiceCommand(inputModel.Title, inputModel.Description, inputModel.IdClient, 
-                                                           inputModel.IdFreelancer, inputModel.TotalCost);
-
             var result = await _mediator.Send(command);
 
             return CreatedAtAction(nameof(GetProvidedService), new { id = result.Id }, result);
         }
+
+        //[HttpPut("{id}/start")]
+        //[Authorize(Roles = "freelancer")]
+        //public async Task<IActionResult> Start(int id)
+        //{
+        //    //IMPLEMENTAR ABAIXO UM CQRS PARA A RESPONSABILIDADE DE INICIAR O SERVIÇO
+        //}
     }
 }

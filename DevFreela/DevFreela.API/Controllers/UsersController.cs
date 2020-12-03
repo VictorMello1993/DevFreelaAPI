@@ -2,6 +2,7 @@
 using DevFreela.Application.Commands.ActivateUser;
 using DevFreela.Application.Commands.CreateUser;
 using DevFreela.Application.Commands.InactivateUser;
+using DevFreela.Application.Commands.LoginUser;
 using DevFreela.Application.Commands.UpdateUser;
 using DevFreela.Application.Queries.GetUser;
 using DevFreela.Application.Queries.SearchClient;
@@ -128,6 +129,14 @@ namespace DevFreela.API.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            return Ok(result);
         }
     }
 }
