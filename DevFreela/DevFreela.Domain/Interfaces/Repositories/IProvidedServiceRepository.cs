@@ -11,5 +11,6 @@ namespace DevFreela.Domain.Interfaces.Repositories
         Task<ProvidedService> GetProvidedServiceClientAsync(int id, int idClient);
         Task<ProvidedService> GetProvidedServiceFreelancerAsync(int id, int idFreelancer);
         Task<List<ProvidedService>> GetAllProvidedServices();
+        Task SaveChanges();
     }
 }

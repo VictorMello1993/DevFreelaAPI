@@ -1,4 +1,5 @@
 ﻿using DevFreela.Domain.Enums;
+using DevFreela.Domain.Exceptions;
 using System;
 
 namespace DevFreela.Domain.Entities
@@ -26,5 +27,16 @@ namespace DevFreela.Domain.Entities
         public DateTime? FinishedAt { get; private set; }
         public StatusProvidedServiceEnum Status { get; private set; }
         public Decimal TotalCost { get; private set; }
+
+        public void Start()
+        {
+            if(Status != StatusProvidedServiceEnum.Pending)
+            {
+                throw new InvalidStatusException(nameof(ProvidedService));
+            }
+
+            this.Status = StatusProvidedServiceEnum.Started;
+            StartedAt = DateTime.Now;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DevFreela.Application.Commands.CreateProvidedService;
+using DevFreela.Application.Commands.StartProvidedService;
 using DevFreela.Application.Queries.GetProvidedServices;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -80,11 +81,15 @@ namespace DevFreela.API.Controllers
             return CreatedAtAction(nameof(GetProvidedService), new { id = result.Id }, result);
         }
 
-        //[HttpPut("{id}/start")]
-        //[Authorize(Roles = "freelancer")]
-        //public async Task<IActionResult> Start(int id)
-        //{
-        //    //IMPLEMENTAR ABAIXO UM CQRS PARA A RESPONSABILIDADE DE INICIAR O SERVIÇO
-        //}
+        [HttpPut("{id}/start")]
+        [Authorize(Roles = "freelancer")]
+        public async Task<IActionResult> Start(int id)
+        {
+            var command = new StartProvidedServiceCommand(id);
+
+            await _mediator.Send(command);
+
+            return NoContent();
+        }
     }
 }
