@@ -43,12 +43,12 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult>CreateSkill([FromBody] CreateSkillInputModel inputModel)
+        public async Task<IActionResult> CreateSkill([FromBody] CreateSkillInputModel inputModel)
         {
             var command = new CreateSkillCommand(inputModel.Description);
             var result = await _mediator.Send(command);
 
             return CreatedAtAction(nameof(GetSkill), new { id = result.Id }, result);
-        }        
+        }
     }
 }

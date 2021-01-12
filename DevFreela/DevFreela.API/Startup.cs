@@ -38,11 +38,14 @@ namespace DevFreela.API
 
             //Injeção de dependência dos repositories
             //services.AddScoped<IUserRepository, UserRepository>();
-            //services.AddRepositories()
-            //        .AddDbContext<DevFreelaDbContext>(options => options.UseMySql(connectionString));
 
+            //Banco de dados MySQL
             services.AddRepositories()
-                    .AddDbContext<DevFreelaDbContext>(options => options.UseInMemoryDatabase(connectionString));
+                    .AddDbContext<DevFreelaDbContext>(options => options.UseMySql(connectionString));
+
+            //Banco de dados em memória
+            //services.AddRepositories()
+            //        .AddDbContext<DevFreelaDbContext>(options => options.UseInMemoryDatabase(connectionString));
 
             //Obtém todas as classes do assembly do projeto que implementam as interfaces IRequest e IRequestHandler => GetUserQuery
             services.AddMediatR(typeof(GetUserQuery));

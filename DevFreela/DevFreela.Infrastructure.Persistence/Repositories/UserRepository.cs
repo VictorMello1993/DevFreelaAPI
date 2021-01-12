@@ -1,8 +1,11 @@
-﻿using DevFreela.Domain.Entities;
+﻿using Dapper;
+using DevFreela.Domain.Entities;
 using DevFreela.Domain.Enums;
 using DevFreela.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DevFreela.Infrastructure.Persistence.Repositories
@@ -10,21 +13,42 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly DevFreelaDbContext _dbContext;
+        private readonly string _connectionString;
 
         public UserRepository(DevFreelaDbContext dbContext)
         {
             _dbContext = dbContext;
+            _connectionString = _dbContext.Database.GetDbConnection().ConnectionString;
         }
 
         public async Task Add(User user)
         {
-            await _dbContext.Users.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
+            //Entity Framework
+            //await _dbContext.Users.AddAsync(user);
+            //await _dbContext.SaveChangesAsync();
+
+            //Dapper
+            using(var sqlConnection = new MySqlConnection(_connectionString))
+            {
+                var sql = "INSERT INTO Users (BirthDate, CreatedAt, Active) VALUES(@birthdate, NOW(), 1)";
+                await sqlConnection.ExecuteAsync(sql, new { birthdate = user.BirthDate });
+            }
         }        
 
         public async Task<User> GetUserAsync(int idUser)
         {
-            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == idUser);
+            //Entity Framework
+            //return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == idUser);
+
+            //Dapper
+            using (var sqlConnection = new MySqlConnection(_connectionString))
+            {
+                var sql = @"SELECT Id, Name, Email, BirthDate, CreatedAt, Active, Role FROM Users
+                            WHERE Id = @IdUser";
+                
+                var result = await sqlConnection.QueryAsync<User>(sql, new {IdUser = idUser });
+                return result.FirstOrDefault();
+            }
         }
 
         public async Task Inactivate(User user)
@@ -52,7 +76,17 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
 
         public async Task<List<User>> GetAllUsersAsync()
         {
-            return await _dbContext.Users.ToListAsync();
+            //Entity Framework
+            //return await _dbContext.Users.ToListAsync();
+
+            //Dapper
+            using (var sqlConnection = new MySqlConnection(_connectionString))
+            {
+                var sql = "SELECT Id, Name, Email, BirthDate, CreatedAt, Active, Role FROM Users";
+                var result = await sqlConnection.QueryAsync<User>(sql);
+
+                return result.ToList();
+            }
         }
 
         public async Task Update(User user, string name, string email)

@@ -13,8 +13,13 @@ namespace DevFreela.Domain.Entities
             UserSkills = new List<UserSkill>();
         }
 
+        public Skill()
+        {
+            
+        }
+
         public string Description { get; private set; }
         public DateTime CreatedAt { get; private set; }
-        public List<UserSkill> UserSkills { get; set; }
+        public List<UserSkill> UserSkills { get; private set; }
     }
 }
