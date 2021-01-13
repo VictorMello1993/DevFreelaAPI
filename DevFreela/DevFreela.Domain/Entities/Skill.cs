@@ -13,7 +13,7 @@ namespace DevFreela.Domain.Entities
             UserSkills = new List<UserSkill>();
         }
 
-        public Skill()
+        protected Skill()
         {
             
         }

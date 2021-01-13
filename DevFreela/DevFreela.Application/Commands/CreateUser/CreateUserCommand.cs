@@ -22,8 +22,8 @@ namespace DevFreela.Application.Commands.CreateUser
         public EnumUserType UserType { get; private set; }
 
 
-        public string Password { get; private set; }
-        public string Role { get; private set; }
+        public string Password { get; set; }
+        public string Role { get; set; }
 
     }
 }

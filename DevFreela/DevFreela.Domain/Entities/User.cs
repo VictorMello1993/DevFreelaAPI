@@ -22,7 +22,7 @@ namespace DevFreela.Domain.Entities
             Role = role;
         }
 
-        public User()
+        protected User()
         {
             
         }

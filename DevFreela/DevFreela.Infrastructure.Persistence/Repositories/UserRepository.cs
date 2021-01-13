@@ -30,8 +30,17 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             //Dapper
             using(var sqlConnection = new MySqlConnection(_connectionString))
             {
-                var sql = "INSERT INTO Users (BirthDate, CreatedAt, Active) VALUES(@birthdate, NOW(), 1)";
-                await sqlConnection.ExecuteAsync(sql, new { birthdate = user.BirthDate });
+                var parameters = new
+                {
+                    name = user.Name,
+                    email = user.Email,
+                    birthdate = user.BirthDate,
+                    password = user.Password,
+                    role = user.Role
+                };
+
+                var sql = "INSERT INTO Users (Name, Email, BirthDate, Password, Role, CreatedAt, Active) VALUES(@name, @email, @birthdate, @password, @role, NOW(), 1)";
+                await sqlConnection.ExecuteAsync(sql, parameters);
             }
         }        
 
@@ -96,6 +105,6 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
 
             _dbContext.Entry(user).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
-        }
+        }        
     }
 }

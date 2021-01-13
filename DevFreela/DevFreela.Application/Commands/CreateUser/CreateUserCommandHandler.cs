@@ -26,10 +26,13 @@ namespace DevFreela.Application.Commands.CreateUser
         {
             var user = new User(request.Name, request.Email, request.BirthDate, LoginService.ComputeSha256Hash(request.Password), request.Role);
 
+            //Sem o padrão repository
             //await _dbcontext.Users.AddAsync(user);
             //await _dbcontext.SaveChangesAsync();
 
+            //Com padrão repository
             await _userRepository.Add(user);
+
             //Chamada para acesso a dados e persistir no banco
             return new CreateUserViewModel(user.Id, user.Name, user.Email, user.BirthDate);
         }
