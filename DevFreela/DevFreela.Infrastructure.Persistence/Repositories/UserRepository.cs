@@ -28,7 +28,7 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             //await _dbContext.SaveChangesAsync();
 
             //Dapper
-            using(var sqlConnection = new MySqlConnection(_connectionString))
+            using (var sqlConnection = new MySqlConnection(_connectionString))
             {
                 var parameters = new
                 {
@@ -42,7 +42,7 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
                 var sql = "INSERT INTO Users (Name, Email, BirthDate, Password, Role, CreatedAt, Active) VALUES(@name, @email, @birthdate, @password, @role, NOW(), 1)";
                 await sqlConnection.ExecuteAsync(sql, parameters);
             }
-        }        
+        }
 
         public async Task<User> GetUserAsync(int idUser)
         {
@@ -54,8 +54,8 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             {
                 var sql = @"SELECT Id, Name, Email, BirthDate, CreatedAt, Active, Role FROM Users
                             WHERE Id = @IdUser";
-                
-                var result = await sqlConnection.QueryAsync<User>(sql, new {IdUser = idUser });
+
+                var result = await sqlConnection.QueryAsync<User>(sql, new { IdUser = idUser });
                 return result.FirstOrDefault();
             }
         }
@@ -105,6 +105,25 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
 
             _dbContext.Entry(user).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
-        }        
+        }
+
+        public async Task<User> Login(string email, string password)
+        {
+            //Entity Framework
+            //return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+
+            //Dapper
+            using (var sqlConnection = new MySqlConnection(_connectionString))
+            {
+                var sql = @"SELECT Email, Password, Role FROM Users
+                            WHERE Email = @Email
+                            AND Password = @Password";
+
+                var result = await sqlConnection.QueryAsync<User>(sql, new { Email = email, password = password });
+                return result.FirstOrDefault();
+
+            }
+        }
     }
 }
+

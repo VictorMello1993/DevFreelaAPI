@@ -14,5 +14,6 @@ namespace DevFreela.Domain.Interfaces.Repositories
         //Task<User> GetUserClientAsync(int IdUser);
         Task<List<User>> GetAllUsersAsync();
         Task Update(User user, string name, string email);
+        Task<User> Login(string email, string password);
     }
 }

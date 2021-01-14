@@ -27,7 +27,7 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             //await _dbContext.SaveChangesAsync();
 
             //Dapper
-            using(var sqlConnection = new MySqlConnection(_connectionString))
+            using (var sqlConnection = new MySqlConnection(_connectionString))
             {
                 var parameters = new
                 {
@@ -38,20 +38,20 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
                     totalcost = providedService.TotalCost
                 };
 
-                var sql = @"INSERT INTO ProvidedServices (Title, Description, IdClient, IdFreelancer, CreatedAt, TotalCost)
-                            VALUES(@title, @description, @idclient, @idfreelancer, NOW(), @totalcost)";
+                var sql = @"INSERT INTO ProvidedServices (Title, Description, IdClient, IdFreelancer, CreatedAt, TotalCost, Status)
+                            VALUES(@title, @description, @idclient, @idfreelancer, NOW(), @totalcost, 0)";
 
                 await sqlConnection.ExecuteAsync(sql, parameters);
             }
-        }      
-               
+        }
+
         public async Task<List<ProvidedService>> GetAllProvidedServices()
         {
             //Entity Framework
             //return await _dbContext.ProvidedServices.ToListAsync();
 
             //Dapper
-            using(var sqlConnection = new MySqlConnection(_connectionString))
+            using (var sqlConnection = new MySqlConnection(_connectionString))
             {
                 var sql = "SELECT * FROM ProvidedServices";
                 var result = await sqlConnection.QueryAsync<ProvidedService>(sql);
@@ -68,8 +68,8 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             //Dapper
             using (var sqlConnection = new MySqlConnection(_connectionString))
             {
-                var sql = @"SELECT Id, Title, Description FROM ProvidedServices
-                            WHERE Id = @Id";
+                var sql = @"SELECT * FROM ProvidedServices
+                          WHERE Id = @Id";
 
                 var result = await sqlConnection.QueryAsync<ProvidedService>(sql, new { Id = id });
 

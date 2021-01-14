@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using DevFreela.Domain.Entities;
+using DevFreela.Domain.Interfaces.Repositories;
 using DevFreela.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -22,45 +23,27 @@ namespace DevFreela.Application.Commands.LoginUser
         private readonly DevFreelaDbContext _dbContext;
         private readonly IConfiguration _configuration;
         private readonly string _connectionString;
-
-        public LoginUserCommandHandler(IConfiguration configuration, DevFreelaDbContext dbContext)
+        private readonly IUserRepository _userRepository;
+        
+        public LoginUserCommandHandler(DevFreelaDbContext dbContext, IConfiguration configuration, IUserRepository userRepository)
         {
             _dbContext = dbContext;
             _configuration = configuration;
             _connectionString = _dbContext.Database.GetDbConnection().ConnectionString;
+            _userRepository = userRepository;
         }
 
         public async Task<LoginUserViewModel> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            var encryptedPassword = LoginService.ComputeSha256Hash(request.Password);
-
-            //Entity Framework
-            //var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email && u.Password == encryptedPassword);
-
-            //if (user == null)
-            //{
-            //    return null;
-            //}
-
-            //return new LoginUserViewModel(user.Email, GenerateJwtToken(user.Email, user.Role));
-
-            //Dapper
-            using(var sqlConnection = new MySqlConnection(_connectionString))
-            {                
-                var sql = @"SELECT Email, Password, Role FROM Users
-                            WHERE Email = @email
-                            AND Password = @password";
-
-                var result = await sqlConnection.QueryAsync<User>(sql, new { email = request.Email, password = encryptedPassword });
-                var user = result.FirstOrDefault();
-
-                if(user == null)
-                {
-                    return null;
-                }
-
-                return new LoginUserViewModel(user.Email, GenerateJwtToken(user.Email, user.Role));
+            var encryptedPassword = LoginService.ComputeSha256Hash(request.Password);            
+            var user = await _userRepository.Login(request.Email, encryptedPassword);
+            
+            if(user == null)
+            {
+                return null;
             }
+
+            return new LoginUserViewModel(user.Email, GenerateJwtToken(user.Email, user.Role));
         }
 
         private string GenerateJwtToken(string email, string role)
