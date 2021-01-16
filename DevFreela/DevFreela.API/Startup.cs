@@ -48,7 +48,8 @@ namespace DevFreela.API
             //        .AddDbContext<DevFreelaDbContext>(options => options.UseInMemoryDatabase(connectionString));
 
             //Obtém todas as classes do assembly do projeto que implementam as interfaces IRequest e IRequestHandler => GetUserQuery
-            services.AddMediatR(typeof(GetUserQuery));
+            services.AddMediatR(typeof(GetUserQuery))
+                    .AddMemoryCache();
 
             //Configuração do Swagger
             services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "DevFreela API", Version = "v1" }));

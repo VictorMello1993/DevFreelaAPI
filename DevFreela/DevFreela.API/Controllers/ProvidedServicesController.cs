@@ -5,6 +5,9 @@ using DevFreela.Application.Queries.GetProvidedServices;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DevFreela.API.Controllers
@@ -13,21 +16,41 @@ namespace DevFreela.API.Controllers
     public class ProvidedServicesController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMemoryCache _memorycache;
+        private const string GET_ALL_PROVIDEDSERVICES_CACHE = "GET_ALL_PROVIDEDSERVICES_CACHE";
+        private const string GET_PROVIDEDSERVICES_CACHE = "GET_PROVIDEDSERVICE_CACHE_{0}";
 
-        public ProvidedServicesController(IMediator mediator)
+        public ProvidedServicesController(IMediator mediator, IMemoryCache memorycache)
         {
             _mediator = mediator;
+            _memorycache = memorycache;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            if(_memorycache.TryGetValue(GET_ALL_PROVIDEDSERVICES_CACHE, out List<GetProvidedServiceViewModel> providedServices))
+            {
+                return Ok(providedServices);
+            }
+
             var result = await _mediator.Send(new GetAllProvidedServicesQuery());
 
             if (result == null)
             {
                 return NotFound();
             }
+
+            var memoryCacheOptions = new MemoryCacheEntryOptions
+            {
+                //Daqui a 1h, irei invalidar a cache
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(3600),
+
+                //Tempo decorrido sem requisições => Passa 20 minutos seguidos sem nenhuma requisição
+                SlidingExpiration = TimeSpan.FromSeconds(1200)
+            };
+
+            _memorycache.Set(GET_ALL_PROVIDEDSERVICES_CACHE, result, memoryCacheOptions);
 
             return Ok(result);
         }
@@ -62,6 +85,11 @@ namespace DevFreela.API.Controllers
         [Authorize(Roles = "client, freelancer")]
         public async Task<IActionResult> GetProvidedService(int id)
         {
+            if(_memorycache.TryGetValue(string.Format(GET_PROVIDEDSERVICES_CACHE, id), out GetProvidedServiceViewModel providedService))
+            {
+                return Ok(providedService);
+            }
+
             var query = new GetProvidedServiceQuery(id);
             var result = await _mediator.Send(query);
 
@@ -69,6 +97,17 @@ namespace DevFreela.API.Controllers
             {
                 return NotFound();
             }
+
+            var memoryCacheOptions = new MemoryCacheEntryOptions
+            {
+                //Daqui a 1h, irei invalidar a cache
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(3600),
+
+                //Tempo decorrido sem requisições => Passa 20 minutos seguidos sem nenhuma requisição
+                SlidingExpiration = TimeSpan.FromSeconds(1200)
+            };
+
+            _memorycache.Set(string.Format(GET_PROVIDEDSERVICES_CACHE, id), result, memoryCacheOptions);
 
             return Ok(result);
         }

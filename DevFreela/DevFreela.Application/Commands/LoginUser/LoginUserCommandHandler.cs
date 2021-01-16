@@ -22,14 +22,12 @@ namespace DevFreela.Application.Commands.LoginUser
     {
         private readonly DevFreelaDbContext _dbContext;
         private readonly IConfiguration _configuration;
-        private readonly string _connectionString;
         private readonly IUserRepository _userRepository;
         
         public LoginUserCommandHandler(DevFreelaDbContext dbContext, IConfiguration configuration, IUserRepository userRepository)
         {
             _dbContext = dbContext;
-            _configuration = configuration;
-            _connectionString = _dbContext.Database.GetDbConnection().ConnectionString;
+            _configuration = configuration;            
             _userRepository = userRepository;
         }
 

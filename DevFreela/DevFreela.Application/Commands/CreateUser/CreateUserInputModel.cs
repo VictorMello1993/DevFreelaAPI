@@ -8,7 +8,7 @@ namespace DevFreela.Application.Commands.CreateUser
         public string Name { get; set; }
         public string Email { get; set; }
         public DateTime BirthDate { get; set; }
-        public EnumUserType UserType { get; set; }
+        //public EnumUserType UserType { get; set; }
 
         public string Password { get; set; }
         public string Role { get; set; }

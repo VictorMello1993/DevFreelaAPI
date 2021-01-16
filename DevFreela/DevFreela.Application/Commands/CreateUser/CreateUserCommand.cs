@@ -19,7 +19,7 @@ namespace DevFreela.Application.Commands.CreateUser
         public string Name { get; private set; }
         public string Email { get; private set; }
         public DateTime BirthDate { get; private set; }
-        public EnumUserType UserType { get; private set; }
+        //public EnumUserType UserType { get; private set; }
 
 
         public string Password { get; set; }
