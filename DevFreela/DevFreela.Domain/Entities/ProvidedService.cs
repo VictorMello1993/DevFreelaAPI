@@ -43,5 +43,16 @@ namespace DevFreela.Domain.Entities
             this.Status = StatusProvidedServiceEnum.Started;
             StartedAt = DateTime.Now;
         }
+
+        public void Finish()
+        {
+            if(Status == StatusProvidedServiceEnum.Finished)
+            {
+                throw new InvalidStatusException(nameof(ProvidedService));
+            }
+
+            this.Status = StatusProvidedServiceEnum.Finished;
+            FinishedAt = DateTime.Now;
+        }
     }
 }

@@ -16,10 +16,19 @@ namespace DevFreela.Application.Commands.FinishProvidedService
 
         public async Task<Unit> Handle(FinishProvidedServiceCommand request, CancellationToken cancellationToken)
         {
-            //Dapper
-            await _providedServiceRepository.Start(request.IdProvidedService);
+            //Entity Framework
+            var providedService = await _providedServiceRepository.GetProvidedServiceAsync(request.IdProvidedService);
+
+            providedService.Finish();
+
+            await _providedServiceRepository.SaveChanges();
 
             return Unit.Value;
+
+            //Dapper
+            //await _providedServiceRepository.Finish(request.IdProvidedService);
+
+            //return Unit.Value;
         }
     }
 }

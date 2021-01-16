@@ -64,19 +64,19 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
         public async Task<ProvidedService> GetProvidedServiceAsync(int id)
         {
             //Entity Framework
-            //return await _dbContext.ProvidedServices.FirstOrDefaultAsync(ps => ps.Id == id);
+            return await _dbContext.ProvidedServices.FirstOrDefaultAsync(ps => ps.Id == id);
 
             //Dapper
-            using (var sqlConnection = new MySqlConnection(_connectionString))
-            {
-                var sql = @"SELECT Id, Title, Description, IdFreelancer, IdClient, Status, CreatedAt  
-                          FROM ProvidedServices
-                          WHERE Id = @Id";
+            //using (var sqlConnection = new MySqlConnection(_connectionString))
+            //{
+            //    var sql = @"SELECT Id, Title, Description, IdFreelancer, IdClient, Status, CreatedAt  
+            //              FROM ProvidedServices
+            //              WHERE Id = @Id";
 
-                var result = await sqlConnection.QueryAsync<ProvidedService>(sql, new { Id = id });
+            //    var result = await sqlConnection.QueryAsync<ProvidedService>(sql, new { Id = id });
 
-                return result.FirstOrDefault();
-            }
+            //    return result.FirstOrDefault();
+            //}
         }
 
         public async Task<ProvidedService> GetProvidedServiceClientAsync(int id, int idClient)
@@ -129,7 +129,8 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
                 var sql = @"UPDATE ProvidedServices
                                 SET StartedAt = NOW(),
                                     Status = @statusProvidedService
-                            WHERE Id = @id";
+                            WHERE Id = @id
+                            AND Status = 0";
 
                 var result = await sqlConnection.ExecuteAsync(sql, new { id = idProvidedService, statusProvidedService = StatusProvidedServiceEnum.Started });                
             }
