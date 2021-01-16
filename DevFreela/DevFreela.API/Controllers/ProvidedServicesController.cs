@@ -1,4 +1,5 @@
 ﻿using DevFreela.Application.Commands.CreateProvidedService;
+using DevFreela.Application.Commands.FinishProvidedService;
 using DevFreela.Application.Commands.StartProvidedService;
 using DevFreela.Application.Queries.GetProvidedServices;
 using MediatR;
@@ -86,6 +87,17 @@ namespace DevFreela.API.Controllers
         public async Task<IActionResult> Start(int id)
         {
             var command = new StartProvidedServiceCommand(id);
+
+            await _mediator.Send(command);
+
+            return NoContent();
+        }
+
+        [HttpPut("{id}/finish")]
+        [Authorize(Roles = "client")]
+        public async Task<IActionResult> Finish(int id)
+        {
+            var command = new FinishProvidedServiceCommand(id);
 
             await _mediator.Send(command);
 

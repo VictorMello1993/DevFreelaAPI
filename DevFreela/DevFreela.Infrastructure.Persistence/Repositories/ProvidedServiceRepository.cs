@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using DevFreela.Domain.Entities;
+using DevFreela.Domain.Enums;
 using DevFreela.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
@@ -68,7 +69,8 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             //Dapper
             using (var sqlConnection = new MySqlConnection(_connectionString))
             {
-                var sql = @"SELECT * FROM ProvidedServices
+                var sql = @"SELECT Id, Title, Description, IdFreelancer, IdClient, Status, CreatedAt  
+                          FROM ProvidedServices
                           WHERE Id = @Id";
 
                 var result = await sqlConnection.QueryAsync<ProvidedService>(sql, new { Id = id });
@@ -116,6 +118,36 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
         public async Task SaveChanges()
         {
             await _dbContext.SaveChangesAsync();
+        }
+
+        //Exclusivo do Dapper, devido a uma limitação de não possuir monitoramento de transação de banco de dados para persistir objetos
+        public async Task Start(int idProvidedService)
+        {
+            //Dapper
+            using (var sqlConnection = new MySqlConnection(_connectionString))
+            {
+                var sql = @"UPDATE ProvidedServices
+                                SET StartedAt = NOW(),
+                                    Status = @statusProvidedService
+                            WHERE Id = @id";
+
+                var result = await sqlConnection.ExecuteAsync(sql, new { id = idProvidedService, statusProvidedService = StatusProvidedServiceEnum.Started });                
+            }
+        }
+
+        public async Task Finish(int idProvidedService)
+        {
+            //Dapper
+            using(var sqlConnection = new MySqlConnection(_connectionString))
+            {
+                var sql = @"UPDATE ProvidedServices
+                                SET FinishedAt = NOW(),
+                                    Status = @statusProvidedService
+                            WHERE Id = @id";
+
+                var result = await sqlConnection.ExecuteAsync(sql, new { id = idProvidedService, statusProvidedService = StatusProvidedServiceEnum.Finished });
+                            
+            }
         }
     }
 }
