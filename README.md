@@ -11,3 +11,6 @@ API construída para gerenciar desenvolvedores freelancer - Curso ASP.NET Core, 
   - Testes unitários com Xunit
   - Deploy do projeto com Azure DevOps
   
+  Obs: Utilizei MySQL em vez do SQL Server por eu não ter conseguido instalar no meu computador.
+  
+  
