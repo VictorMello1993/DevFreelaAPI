@@ -23,7 +23,19 @@ namespace DevFreela.Application.Commands.LoginUser
         private readonly DevFreelaDbContext _dbContext;
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _userRepository;
-        
+
+        public LoginUserCommandHandler(IConfiguration configuration, IUserRepository userRepository)
+        {
+            _configuration = configuration;
+            _userRepository = userRepository;
+        }
+
+        public LoginUserCommandHandler(DevFreelaDbContext dbContext, IConfiguration configuration)
+        {
+            _dbContext = dbContext;
+            _configuration = configuration;
+        }
+
         public LoginUserCommandHandler(DevFreelaDbContext dbContext, IConfiguration configuration, IUserRepository userRepository)
         {
             _dbContext = dbContext;

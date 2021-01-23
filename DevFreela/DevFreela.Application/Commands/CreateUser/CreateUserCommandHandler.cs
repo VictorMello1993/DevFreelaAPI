@@ -1,6 +1,7 @@
 ﻿using DevFreela.Application.Commands.LoginUser;
 using DevFreela.Domain.Entities;
 using DevFreela.Domain.Interfaces.Repositories;
+using DevFreela.Infrastructure.Persistence;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,18 +9,29 @@ using System.Threading.Tasks;
 namespace DevFreela.Application.Commands.CreateUser
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, CreateUserViewModel>
-    {
-        //private readonly DevFreelaDbContext _dbcontext;
-        //public CreateUserCommandHandler(DevFreelaDbContext dbContext)
-        //{
-        //    _dbcontext = dbContext;
-        //}
-        
-        //Acessando dados usando o padrão Repository, em vez de ficar dependendo totalmente na camada de aplicação e assim o banco ficar lento, dificultando os testes unitários
+    {                
+        /*Acessando dados usando o padrão Repository, 
+         * em vez de ficar dependendo totalmente na camada de aplicação e assim o banco ficar lento, 
+         * dificultando os testes unitários*/
         private readonly IUserRepository _userRepository;
+
+        //Acesso direto ao banco de dados da camada de aplicação
+        private readonly DevFreelaDbContext _dbcontext;
+
         public CreateUserCommandHandler(IUserRepository userRepository)
         {
-            _userRepository = userRepository;   
+            _userRepository = userRepository;
+        }
+
+        public CreateUserCommandHandler(DevFreelaDbContext dbcontext)
+        {
+            _dbcontext = dbcontext;
+        }
+
+        public CreateUserCommandHandler(DevFreelaDbContext dbContext, IUserRepository userRepository)
+        {
+            _userRepository = userRepository;
+            _dbcontext = dbContext;
         }
 
         public async Task<CreateUserViewModel> Handle(CreateUserCommand request, CancellationToken cancellationToken)

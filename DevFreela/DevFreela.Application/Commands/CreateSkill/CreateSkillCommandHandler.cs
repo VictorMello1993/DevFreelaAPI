@@ -1,9 +1,7 @@
 ﻿using DevFreela.Domain.Entities;
 using DevFreela.Domain.Interfaces.Repositories;
+using DevFreela.Infrastructure.Persistence;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,8 +10,21 @@ namespace DevFreela.Application.Commands.CreateSkill
     public class CreateSkillCommandHandler : IRequestHandler<CreateSkillCommand, CreateSkillViewModel>
     {
         private readonly ISkillRepository _skillRepository;
+        private readonly DevFreelaDbContext _dbcontext;
+
         public CreateSkillCommandHandler(ISkillRepository skillRepository)
         {
+            _skillRepository = skillRepository;
+        }
+
+        public CreateSkillCommandHandler(DevFreelaDbContext dbcontext)
+        {
+            _dbcontext = dbcontext;
+        }
+
+        public CreateSkillCommandHandler(DevFreelaDbContext dbContext, ISkillRepository skillRepository)
+        {
+            _dbcontext = dbContext;
             _skillRepository = skillRepository;
         }
 

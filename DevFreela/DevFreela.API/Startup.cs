@@ -37,11 +37,12 @@ namespace DevFreela.API
             var connectionString = Configuration.GetConnectionString("DevFreelaMySQL");
 
             //Injeção de dependência dos repositories
-            //services.AddScoped<IUserRepository, UserRepository>();
+            //services.AddScoped<IUserRepository, UserRepository>(); //Singleton de User para cada requisição
 
-            //Banco de dados MySQL
-            services.AddRepositories()
-                    .AddDbContext<DevFreelaDbContext>(options => options.UseMySql(connectionString));
+            /*Adicionando singletons para cada entidade. 
+            Para cada requisição, será utilizada a mesma instância de cada entidade, através do método AddScoped()*/
+            services.AddRepositories() 
+                    .AddDbContext<DevFreelaDbContext>(options => options.UseMySql(connectionString)); //Banco de dados MySQL
 
             //Banco de dados em memória
             //services.AddRepositories()
@@ -54,6 +55,7 @@ namespace DevFreela.API
             //Configuração do Swagger
             services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "DevFreela API", Version = "v1" }));
 
+            //Configurações para gerar tokens de autenticação JWT do usuário
             services
               .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
               .AddJwtBearer(options =>
